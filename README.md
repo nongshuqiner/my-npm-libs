@@ -2,7 +2,7 @@
 
 ## 概述
 
->构建一个自己的第三方库，以下是教程。
+>构建一个自己的第三方库，以下是教程。也可以前往我的博客：[发布一个 npm 包，构建自己的第三方库](https://www.jianshu.com/p/14e5b3917d19)。
 
 ## 申请一个npm 账号 以及创建好相关 github 项目
 
@@ -325,7 +325,7 @@ npm install --save ...
 
 至于单元测试请自行选择相关库进行测试。
 
->至此一个基本的简单的npm第三方库构建完成。
+>至此一个基本的简单的npm第三方库构建完成。下面我们进行其他的发布工作。
 
 ## git提交
 
@@ -393,6 +393,37 @@ sh npm-publish.sh
 执行效果如图：
 
 ![sh npm-publish.sh结果](https://upload-images.jianshu.io/upload_images/4645892-308c565bc8d8ba1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+## Usage(使用)
+
+发布成功后就可以使用了。使用有两种形式，一种是 `npm` 安装，一种是 `<script>` 引用。
+
+### npm 安装：
+
+``` shell
+npm install --save my-npm-libs
+```
+
+``` JavaScript
+import myNpmLibs from 'my-npm-libs'
+var a = [1, 2, 3, 4, 1, 5, 1, 7]
+console.log(myNpmLibs(a)) // array
+// 或者
+const myNpmLibs = require('my-npm-libs')
+var a = [1, 2, 3, 4, 1, 5, 1, 7]
+console.log(myNpmLibs(a)) // array
+```
+
+### `<script>`使用
+
+``` HTML
+<script src="//unpkg.com/my-npm-libs@1.0.0/lib/index.js"></script>
+<script>
+  console.log(window.dataType);
+  var a = [1, 2, 3, 4, 1, 5, 1, 7];
+  console.log(dataType(a));
+</script>
+```
 
 ## run(运行)
 
