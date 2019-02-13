@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>my-npm-package</title>
+  </head>
+  <body>
+    <div id="examples">
+      <div class="">
+        var a = [1, 2, 3, 4, 1, 5, 1, 7]，a的数据类型是什么？
+      </div>
+      <div id="result"></div>
+    </div>
+    <script src="../lib/index.js"></script>
+    <script>
+      console.log(window.dataType);
+      var a = [1, 2, 3, 4, 1, 5, 1, 7];
+      var result = document.getElementById('result');
+      result.innerHTML = dataType(a);
+    </script>
+  </body>
+</html>
