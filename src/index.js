@@ -1,8 +1,8 @@
 // 获取数据类型
-(function (root, globalName, factory) {
+(function (root, pluginName, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD:
-    define([], factory);
+    define(factory()); // define([], factory);
   } else if (typeof module === 'object' && module.exports) {
     // Node:
     module.exports = factory();
@@ -10,7 +10,10 @@
     module.exports.default = module.exports;
   } else {
     // Browser:
-    window[globalName] = factory();
+    if (root === undefined) {
+      root = typeof global !== "undefined" ? global : window
+    }
+    root[pluginName] = factory();
   }
 }(this, 'dataType', function () {
   'use strict';

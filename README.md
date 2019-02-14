@@ -41,7 +41,7 @@ npm init
 ``` shell
 mkdir examples lib src test # 创建所需目录
 touch .babelrc .gitignore README.md # 创建所需文件
-touch examples/index.html src/index.js
+touch examples/index.html src/index.js test/index.js
 ```
 
 目录如下：
@@ -54,6 +54,7 @@ touch examples/index.html src/index.js
 ├── src/                              // 目录: 库目录
 │   ├── index.js                      // 文件: 库内容
 ├── test/                             // 目录: 放置单元测试文件
+│   ├── index.js                      // 文件: 测试内容
 .babelrc
 .gitignore
 package.json
@@ -210,9 +211,9 @@ yarn-error.log*
 
 ``` json
 {
-  "name": "my-npm-package",
-  "version": "1.0.0",
+  "name": "my-npm-libs",
   "description": "发布一个npm包，构建自己的第三方库",
+  "version": "1.0.1",
   "author": "nongshuqiner <ym1185509297@163.com>",
   "license": "MIT",
   "main": "src/index.js",
@@ -224,22 +225,24 @@ yarn-error.log*
   ],
   "private": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive",
     "examples": "open ./examples/index.html",
     "build": "./node_modules/.bin/babel src --out-dir lib"
   },
   "keywords": [
-    "my-npm-package"
+    "my-npm-libs"
   ],
-  "homepage": "https://github.com/nongshuqiner/my-npm-package.git",
+  "homepage": "https://github.com/nongshuqiner/my-npm-libs.git",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nongshuqiner/my-npm-package.git"
+    "url": "git+https://github.com/nongshuqiner/my-npm-libs.git"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
 ```
@@ -262,7 +265,7 @@ examples/index.html的内容：
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>my-npm-package</title>
+    <title>my-npm-libs</title>
   </head>
   <body>
     <div id="examples">
@@ -323,7 +326,102 @@ npm install --save ...
 
 ### test 单元测试
 
-至于单元测试请自行选择相关库进行测试。
+至于单元测试你可以另外请自行选择相关库进行测试，也可以按照我的习惯进行测试。
+
+在测试前你需要了解一下[mocha](https://mochajs.org/)，[chai](https://www.chaijs.com/)这两个库，这里放上教程你可以看看：[测试框架 Mocha 实例教程](http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html)
+
+安装 `mocha` 和 `chai`：
+
+``` shell
+npm install --save-dev mocha chai
+```
+
+test/index.js:
+
+``` JavaScript
+// 断言库 chai.js
+var expect = require('chai').expect;
+var dataType = require('../src/index');
+
+// 测试脚本里面应该包括一个或多个describe块，称为测试套件（test suite）
+describe('基本数据类型', function () {
+  // 每个describe块应该包括一个或多个it块，称为测试用例（test case）
+  // 基本数据类型
+  it('undefined-类型检测测试', () => {
+    // 断言
+    expect(dataType(undefined)).to.equal('undefined');
+  });
+  it('null-类型检测测试', () => {
+    expect(dataType(null)).to.equal('null');
+  });
+  it('string-类型检测测试', () => {
+    expect(dataType('abc')).to.equal('string');
+  });
+  it('boolean-类型检测测试', () => {
+    expect(dataType(true)).to.equal('boolean');
+  });
+  it('number-类型检测测试', () => {
+    expect(dataType(1)).to.equal('number');
+  });
+});
+
+describe('引用数据类型', function () {
+  it('array-类型检测测试', () => {
+    expect(dataType([1])).to.equal('array');
+  });
+  it('object-类型检测测试', () => {
+    expect(dataType({})).to.equal('object');
+  });
+  it('function-类型检测测试', () => {
+    expect(dataType(function () {})).to.equal('function');
+  });
+});
+
+describe('其他数据类型', function () {
+  it('date-类型检测测试', () => {
+    expect(dataType(new Date())).to.equal('date');
+  });
+  it('regex-类型检测测试', () => {
+    expect(dataType(new RegExp("\\w+"))).to.equal('regexp');
+  });
+});
+```
+
+通过命令行测试：
+
+``` shell
+npm run test
+```
+
+结果如下：
+
+``` shell
+$ npm run test
+
+> my-npm-libs@1.0.1 test /Users/yanmo/Public/mynpm/my-npm-libs
+> mocha --recursive
+
+
+
+  基本数据类型
+    ✓ undefined-类型检测测试
+    ✓ null-类型检测测试
+    ✓ string-类型检测测试
+    ✓ boolean-类型检测测试
+    ✓ number-类型检测测试
+
+  引用数据类型
+    ✓ array-类型检测测试
+    ✓ object-类型检测测试
+    ✓ function-类型检测测试
+
+  其他数据类型
+    ✓ date-类型检测测试
+    ✓ regex-类型检测测试
+
+
+  10 passing (12ms)
+```
 
 >至此一个基本的简单的npm第三方库构建完成。下面我们进行其他的发布工作。
 
@@ -358,10 +456,8 @@ echo "\033[0;32m?\033[0m \033[36m请输入你的新发布的版本号(ex:1.0.0)�
 
 read version
 
-v='  "version": "'$version'",'
-
 # 处理 package.json
-sed -i -e "4s/^.*$/$v/" 'package.json'
+sed -i -e "s/\"version\": \(.*\)/\"version\": \"$version\",/g" 'package.json'
 if [ -f "package.json-e" ];then
   rm 'package.json-e'
 fi
@@ -381,7 +477,8 @@ npm publish # 发布
 
 npm config set registry=https://registry.npm.taobao.org # 设置为淘宝镜像
 
-echo "\033[36m停止\033[0m"
+echo "\033[36m 完成 \033[0m"
+exit
 ```
 
 然后，可以通过如下命令运行：
@@ -417,7 +514,7 @@ console.log(myNpmLibs(a)) // array
 ### `<script>`使用
 
 ``` HTML
-<script src="//unpkg.com/my-npm-libs@1.0.0/lib/index.js"></script>
+<script src="//unpkg.com/my-npm-libs@1.0.2/lib/index.js"></script>
 <script>
   console.log(window.dataType);
   var a = [1, 2, 3, 4, 1, 5, 1, 7];
@@ -442,6 +539,9 @@ npm run examples
 
 # 运行此命令将所有代码从 src 目录编译到 lib
 npm run build
+
+# 测试
+npm run test
 ```
 
 ## Donation(打赏)
