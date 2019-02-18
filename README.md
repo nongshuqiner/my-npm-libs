@@ -85,7 +85,7 @@ const ... = require('...')
 <script src="..."></script>
 ```
 
-此处我们使用自己写的，获取某个元素在数组中存在的所有位置的方法：
+此处我们使用自己写的，获取数据类型的方法：
 
 ``` JavaScript
 // 获取数据类型
@@ -285,7 +285,7 @@ examples/index.html的内容：
 </html>
 ```
 
-我们可以通过如下命令进行案例测试：
+我们可以通过如下命令进行案例查看：
 
 ```
 npm run examples
@@ -425,16 +425,6 @@ $ npm run test
 
 >至此一个基本的简单的npm第三方库构建完成。下面我们进行其他的发布工作。
 
-## git提交
-
-``` shell
-git init
-git add -A
-git commit -m "first commit"
-git remote add origin XXX
-git push -u origin master
-```
-
 ## 发布 npm 包
 
 进入项目根目录，登录刚刚申请的npm 账号。登录完成以后执行提交。
@@ -491,6 +481,29 @@ sh npm-publish.sh
 
 ![sh npm-publish.sh结果](https://upload-images.jianshu.io/upload_images/4645892-308c565bc8d8ba1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+
+当你的npm包发布后，可以通过如下格式的内容访问到你的包：
+
+```
+unpkg.com/:package@:version/:file
+```
+
+访问结果如图:
+
+![unpkg.com](https://upload-images.jianshu.io/upload_images/4645892-b71d00d48df7eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+这也意味着你可以通过`<script>`标签的形式访问你的包，我猜你需要了解：[UNPKG](https://unpkg.com/)。
+
+## git提交
+
+``` shell
+git init
+git add -A
+git commit -m "first commit"
+git remote add origin XXX
+git push -u origin master
+```
+
 ## Usage(使用)
 
 发布成功后就可以使用了。使用有两种形式，一种是 `npm` 安装，一种是 `<script>` 引用。
@@ -514,7 +527,7 @@ console.log(myNpmLibs(a)) // array
 ### `<script>`使用
 
 ``` HTML
-<script src="//unpkg.com/my-npm-libs@1.0.2/lib/index.js"></script>
+<script src="//unpkg.com/my-npm-libs@1.0.3/lib/index.js"></script>
 <script>
   console.log(window.dataType);
   var a = [1, 2, 3, 4, 1, 5, 1, 7];

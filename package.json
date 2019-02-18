@@ -1,7 +1,7 @@
 {
   "name": "my-npm-libs",
   "description": "发布一个npm包，构建自己的第三方库",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "nongshuqiner <ym1185509297@163.com>",
   "license": "MIT",
   "main": "src/index.js",
